@@ -44,9 +44,3 @@ temp_files/
 *.venv/
 *venv/
 *.deepeval/
-
-# Ignore tfhub_cache files
-tfhub_cache/
-
-# Ignore hash files
-*.meta
