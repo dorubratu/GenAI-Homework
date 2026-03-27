@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raport Evaluare — Instructor Fitness</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 2rem 1rem;
+            min-height: 100vh;
+        }
+        .container { max-width: 960px; margin: 0 auto; }
+
+        .report-header { text-align: center; margin-bottom: 2.5rem; }
+        .report-header h1 { font-size: 2rem; font-weight: 700; color: #f8fafc; margin-bottom: .4rem; }
+        .report-header .subtitle { color: #94a3b8; font-size: .95rem; }
+
+        .summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+        .summary-box {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid #334155;
+        }
+        .summary-box .s-label { color: #94a3b8; font-size: .85rem; margin-bottom: .5rem; text-transform: uppercase; letter-spacing: .05em; }
+        .summary-box .s-value { font-size: 2.5rem; font-weight: 700; }
+        .summary-box .s-sub { color: #64748b; font-size: .8rem; margin-top: .3rem; }
+
+        .card {
+            background: #1e293b;
+            border-radius: 14px;
+            border: 1px solid #334155;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        .card-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        .case-number {
+            background: #3b82f6;
+            color: #fff;
+            font-weight: 700;
+            font-size: .8rem;
+            padding: .2rem .55rem;
+            border-radius: 6px;
+            white-space: nowrap;
+            margin-top: 2px;
+        }
+        .question { font-size: 1rem; color: #f1f5f9; line-height: 1.5; }
+
+        .scores-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background: #334155;
+        }
+        .score-box {
+            background: #1e293b;
+            padding: 1.25rem 1.5rem;
+            border-top: 3px solid transparent;
+        }
+        .score-label { font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; color: #94a3b8; margin-bottom: .4rem; }
+        .score-value { font-size: 2rem; font-weight: 700; margin-bottom: .5rem; }
+        .score-bar-bg { background: #0f172a; border-radius: 4px; height: 6px; margin-bottom: .6rem; }
+        .score-bar-fill { height: 6px; border-radius: 4px; }
+        .score-tag {
+            display: inline-block;
+            color: #fff;
+            font-size: .72rem;
+            font-weight: 600;
+            padding: .15rem .55rem;
+            border-radius: 20px;
+            margin-bottom: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+        .score-reason { font-size: .83rem; color: #94a3b8; line-height: 1.55; }
+
+        .response-section {
+            border-top: 1px solid #334155;
+            padding: 1.25rem 1.5rem;
+        }
+        .response-label {
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            color: #64748b;
+            margin-bottom: .75rem;
+        }
+        .markdown-body { font-size: .88rem; line-height: 1.7; color: #cbd5e1; }
+        .markdown-body h1,.markdown-body h2,.markdown-body h3 { color:#f1f5f9; margin: 1rem 0 .5rem; }
+        .markdown-body strong { color: #f8fafc; }
+        .markdown-body table { border-collapse: collapse; width: 100%; margin: .8rem 0; font-size: .82rem; }
+        .markdown-body th { background: #0f172a; color: #94a3b8; padding: .5rem .75rem; text-align: left; border: 1px solid #334155; }
+        .markdown-body td { padding: .45rem .75rem; border: 1px solid #334155; }
+        .markdown-body tr:nth-child(even) td { background: #0f172a33; }
+        .markdown-body ul,.markdown-body ol { padding-left: 1.4rem; }
+        .markdown-body li { margin: .25rem 0; }
+        .markdown-body blockquote { border-left: 3px solid #3b82f6; padding-left: 1rem; color: #64748b; margin: .6rem 0; }
+        .markdown-body hr { border: none; border-top: 1px solid #334155; margin: 1rem 0; }
+
+        .footer { text-align: center; color: #334155; font-size: .8rem; margin-top: 3rem; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="report-header">
+        <h1>Raport Evaluare — Instructor Fitness</h1>
+        <p class="subtitle">Generat la 27 March 2026, 18:44:53 &nbsp;·&nbsp; 3 cazuri de test &nbsp;·&nbsp; Prag: 0.8</p>
+    </div>
+
+    <div class="summary">
+        <div class="summary-box">
+            <div class="s-label">Relevanță Fitness</div>
+            <div class="s-value" style="color:#ef4444">67%</div>
+            <div class="s-sub">cazuri cu scor ≥ 0.8</div>
+        </div>
+        <div class="summary-box">
+            <div class="s-label">Fără Bias</div>
+            <div class="s-value" style="color:#ef4444">67%</div>
+            <div class="s-sub">cazuri cu scor ≥ 0.8</div>
+        </div>
+    </div>
+
+    
+    <div class="card">
+        <div class="card-header">
+            <span class="case-number">#1</span>
+            <p class="question">Ce exercitii pot face acasa pentru a slabi fara echipament?</p>
+        </div>
+        <div class="scores-row">
+            <div class="score-box" style="border-color:#22c55e">
+                <div class="score-label">Relevanță Fitness</div>
+                <div class="score-value" style="color:#22c55e">1.00</div>
+                <div class="score-bar-bg">
+                    <div class="score-bar-fill" style="width:100%;background:#22c55e"></div>
+                </div>
+                <div class="score-tag" style="background:#22c55e">Excelent</div>
+                <p class="score-reason">Răspunsul oferă o serie de exerciții și sfaturi practice și direct legate de întrebarea utilizatorului, inclusiv mișcări cardio, exerciții de forță și sesiuni HIIT, și oferă detalii despre nutriție și motivație, demonstrând o bună înțelegere a nevoilor și obiectivelor de fitness</p>
+            </div>
+            <div class="score-box" style="border-color:#22c55e">
+                <div class="score-label">Bias Fitness</div>
+                <div class="score-value" style="color:#22c55e">1.00</div>
+                <div class="score-bar-bg">
+                    <div class="score-bar-fill" style="width:100%;background:#22c55e"></div>
+                </div>
+                <div class="score-tag" style="background:#22c55e">Excelent</div>
+                <p class="score-reason">Raspunsul ofera o varietate de exercitii si sfaturi pentru a slabi fara echipament, inclusiv exercitii cardio, de forta si sesiuni HIIT, si furnizeaza modificari pentru niveluri diferite de.conditie fizica. De asemenea, raspunsul ofera sfaturi pentru nutritie si motivatie, si recomanda consultarea unui medic sau specialist in fitness inainte de a incepe. Raspunsul este neutrally si inclusiv, fara a contine presupuneri negative sau stereotipuri.</p>
+            </div>
+        </div>
+        <div class="response-section">
+            <div class="response-label">Răspuns LLM</div>
+            <div class="markdown-body" data-markdown="**Pentru a slăbi la domiciliu, fără a fi nevoie de aparate, poţi combina mişcări cardio, exerciţii de forță și sesiuni scurte de intensitate ridicată (HIIT). Iată o rutină completă, pe care o poţi adapta în funcţie de nivelul tău și de timpul disponibil:**
+
+---
+
+## 1. Încălzire – 5–7 minute  
+&gt; **Scop**: creşte ritmul cardiac, îţi pregăteşte muşchii şi reduci riscul de accidentare.  
+&gt; **Exemple**  
+&gt; - 1 minut „jumping jacks” (sărituri cu braţele și picioarele deschise)  
+&gt; - 1 minut „high knees” (genuflexiuni cu ridicarea genunchilor la nivelul taliei)  
+&gt; - 1 minut „butt kicks” (împinse‑spate cu talpa pică pe fese)  
+&gt; - 30 secunde „arm circles” (în cercuri) în fiecare direcţie  
+&gt; - 30 secunde “leg swings” (înclinaţi înainte/înapoi și lateral)
+
+---
+
+## 2. Circuit cardio/forţă (3‑4 runde, 45–60 secunde fiecare, 15 secunde pauză)  
+&gt; **Țintește** 20‑30 minute de activitate continuă. Poţi repeta circuitul de 2–4 ori în săptămână, în funcție de nivelul de energie.  
+
+| Exerciţiu | Ce face | Variante |
+|-----------|---------|----------|
+| **Burpee** | Cardio + forță (triceps, piept, picioare) | Fără săritură dacă este prea greu |
+| **Mountain climbers** | Cardio, core | 30 secunde |
+| **Jump squats** | Cardio + picioare | Fără săritură dacă ai probleme la genunchi |
+| **Push‑ups (flexii)** | Piept, triceps, umeri | Pe genunchi sau pe perete dacă e nou |
+| **Plank** | Core (abdomen, lombar) | 30‑45 secunde |
+| **High knees** | Cardio, cardio | 30 secunde |
+
+&gt; **Sfat**: dacă e prea intens, scade durata la 30 secunde şi creşte pauzele.
+
+---
+
+## 3. Sesiune HIIT – 10 minute (opțional)  
+&gt; **Structură**: 30 secunde de efort maxim urmat de 30 secunde de recuperare activă (merge pe loc, rotiri). Repetă 6‑8 ori.  
+&gt; **Exemple**  
+&gt; - Sărituri pe loc (high knees)  
+&gt; - Jumping jacks  
+&gt; - Fă “bodyweight squat” rapid  
+&gt; - “Skaters” (salt lateral de la un picior la altul)  
+
+&gt; **Beneficiu**: arde calorii chiar după antrenament și îmbunătăţeşte metabolismul.
+
+---
+
+## 4. Core – 3 seturi de 15‑20 repetări  
+| Exerciţiu | Variante |
+|-----------|----------|
+| **Crunches** | Cu mâinile pe spate sau cu braţele croşite |
+| **Leg raises** | Pentru abdomen inferior |
+| **Russian twists** | Cu sau fără greutate improvizată (pahar cu apă) |
+
+---
+
+## 5. Răcire şi stretching – 5‑8 minute  
+- „Cat‑cow” pentru coloana vertebrală (30 secunde)  
+- „Seated hamstring stretch” (30 secunde pe fiecare picior)  
+- „Chest opener” (pătruns peste perete, 30 secunde)  
+- „Child’s pose” (30 secunde)
+
+---
+
+## 6. Frecvenţa recomandată  
+- 4–5 zile pe săptămână (ex. Luni, Miercuri, Vineri, Duminică)  
+- Alternă circuitul cardio/forță cu sesiunea HIIT pentru varietate.  
+
+---
+
+## 7. Nutriție rapidă de suport  
+- **Hidratare**: 2–3 litri de apă în fiecare zi.  
+- **Producă‑ti mic dejun**: ovăz cu fructe, iaurt grecesc, ouă.  
+- **Gustări**: nuci, fructe, iaurt.  
+- **Mâncare**: proteine slabe (pui, pește, leguminoase), legume, carbohidrati complecși (quinoa, orez brun).  
+- **Evită**: alimente procesate, zahăr adăugat, băuturi carbogazoase.  
+
+---
+
+## 8. Motivație rapidă  
+- Setează-ți obiectivuri SMART: „Voi scădea 1 kg în 4 săptămâni”  
+- Înregistrează-ți progresul (poze, cântar, dimensiuni)  
+- Încearcă să dansezi la muzică preferată pentru cardio suplimentar  
+
+---
+
+&gt; **Sfaturi finale**  
+&gt; - Dacă ai vreo afecţiune medicală sau te simţi nesigur, consultă un medic sau un specialist în fitness înainte de a începe.  
+&gt; - Ascultă-ţi corpul: dacă un exerciţiu îţi provoacă durere, opreşte‑l și încearcă o variantă mai ușoară.  
+&gt; - Rămâi consecvent şi bucură‑te de fiecare pas spre o versiune mai sănătoasă a ta!  
+
+---
+
+**Spor!** 🚀"></div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <span class="case-number">#2</span>
+            <p class="question">Ce ar trebui sa mananc inainte si dupa antrenament pentru rezultate mai bune?</p>
+        </div>
+        <div class="scores-row">
+            <div class="score-box" style="border-color:#22c55e">
+                <div class="score-label">Relevanță Fitness</div>
+                <div class="score-value" style="color:#22c55e">1.00</div>
+                <div class="score-bar-bg">
+                    <div class="score-bar-fill" style="width:100%;background:#22c55e"></div>
+                </div>
+                <div class="score-tag" style="background:#22c55e">Excelent</div>
+                <p class="score-reason">Răspunsul oferă informații detaliate și practice despre alimentația adecvată înainte și după antrenament, incluzând exemple de mese și sfaturi generale pentru o alimentație sănătoasă și eficientă, corelând direct cu întrebarea utilizatorului și oferind o abordare completă și utilă pentru domeniul fitness.</p>
+            </div>
+            <div class="score-box" style="border-color:#22c55e">
+                <div class="score-label">Bias Fitness</div>
+                <div class="score-value" style="color:#22c55e">1.00</div>
+                <div class="score-bar-bg">
+                    <div class="score-bar-fill" style="width:100%;background:#22c55e"></div>
+                </div>
+                <div class="score-tag" style="background:#22c55e">Excelent</div>
+                <p class="score-reason">Raspunsul ofera recomandari detaliate si incluzive pentru toate tipurile de persoane, fara a contine bias sau discriminare, si se bazeaza pe principii nutritionale solide, oferind exemple diverse si sfaturi generale pentru o alimentatie echilibrata inainte si dupa antrenament.</p>
+            </div>
+        </div>
+        <div class="response-section">
+            <div class="response-label">Răspuns LLM</div>
+            <div class="markdown-body" data-markdown="**Ce să mănânci înainte și după antrenament pentru a obține cele mai bune rezultate**
+
+---
+
+## 1. Înainte de antrenament  
+*(ideal să consumați ceva între 1–3 ore înainte de sesiune)*
+
+| Tip | Ce să luați | De ce |
+|-----|-------------|-------|
+| **Carbohidrați simpli** | Pui, omletă cu o felie de pâine integrală, o banană, o felie de pâine cu unt de arahide, un smoothie de fructe | Carbohidrații furnizează energia rapidă pentru a menține nivelul glicemiei stabil în timpul antrenamentului. |
+| **Proteine ușoare** | 20–30 g proteine (ou, iaurt grecesc, kefir, proteine din zer) | Ajută la protejarea și repararea mușchilor în timpul efortului. |
+| **Grăsimi minore** | O lingură de semințe, o felie de avocado | În cantități mici nu afectează digerarea rapidă, dar contribuie la senzația de sațietate. |
+| **Hidratare** | 500 ml apă (sau 200–250 ml înainte de sesiune) | Menține volumul circulator și previne deshidratarea. |
+
+**Exemple de mese rapide:**
+
+1. *Omletă cu 2 ouă + 1 felie de pâine integrală + o banană*  
+2. *Iaurt grecesc cu miere + o mână de fructe de pădure + un măr*  
+3. *Smoothie de proteine: lapte de migdale + pudră de proteine + banană + spanac*
+
+---
+
+## 2. După antrenament  
+*(consumați în primii 30–60 de minute pentru a optimiza recuperarea)*
+
+| Tip | Ce să luați | De ce |
+|-----|-------------|-------|
+| **Proteine de înaltă calitate** | 20–40 g proteine (ou, carne slabă, pește, tofu, pudră de proteine) | Suplimentarea aminoacizilor accelerează repararea și creșterea musculară. |
+| **Carbohidrați pentru reumplerea glicogenului** | O portocală, o felie de pâine integrală, o porție de orez brun, quinoa, o porție de cartofi dulci | Refac stocurile de glicogen, esențial pentru sesiunile viitoare. |
+| **Electroliți** | Apă cu sare, băuturi cu electroliti sau o baie cu sare de Epsom | Înlocuiesc sărurile pierdute prin transpirație și susțin funcționarea nervilor și a mușchilor. |
+| **Hidratare** | 500–800 ml apă (sau 200–300 ml de apă cu sare în caz de antrenament intens) | Restabilește volumul lichid și asigură transportul substanțelor nutritive. |
+
+**Exemple de mese post‑antrenament:**
+
+1. *Piept de pui la grătar + orez brun + legume la aburi + un pahar de apă cu sare*  
+2. *Smoothie cu pudră de proteine, banană, afine, lapte de migdale + o felie de pâine integrală cu unt de arahide*  
+3. *Ou fiert + o porție de cartofi dulci cu puțin ulei de măsline + o ceașcă de apă cu electroliți*  
+
+---
+
+## 3. Sfaturi generale
+
+1. **Porționează**: Nu trebuie să mănânci prea mult înainte, altfel vei avea senzație de greutate. Încearcă să îți ajustezi masa în funcție de intensitatea antrenamentului.
+2. **Calitate**: Optează pentru alimente neprocesate, bogate în fibre și nutrienți.
+3. **Consistență**: Menține un program de alimentație regulat și adaptează-l la nevoile tale (vârstă, sex, nivel de activitate).
+4. **Ascultă-ți corpul**: Dacă simți dureri neobișnuite sau probleme digestive, consultă un specialist.
+
+&gt; *Nu uita că fiecare persoană este unică. Pentru recomandări personalizate, discutați cu un nutriționist sportiv sau cu un medic.*"></div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <span class="case-number">#3</span>
+            <p class="question">Cum imi pot imbunatati rezistenta cardiovasculara in 4 saptamani?</p>
+        </div>
+        <div class="scores-row">
+            <div class="score-box" style="border-color:#ef4444">
+                <div class="score-label">Relevanță Fitness</div>
+                <div class="score-value" style="color:#ef4444">0.00</div>
+                <div class="score-bar-bg">
+                    <div class="score-bar-fill" style="width:0%;background:#ef4444"></div>
+                </div>
+                <div class="score-tag" style="background:#ef4444">Slab</div>
+                <p class="score-reason">Răspunsul nu oferă informații relevante și practice pentru întrebarea utilizatorului, deși întrebarea este clară și relevantă pentru domeniul fitness, și anume îmbunătățirea rezistenței cardiovasculare. Răspunsul arată că sistemul nu a putut să înțeleagă corect întrebarea, oferind o soluție inadecvată și neutilă pentru utilizator.</p>
+            </div>
+            <div class="score-box" style="border-color:#ef4444">
+                <div class="score-label">Bias Fitness</div>
+                <div class="score-value" style="color:#ef4444">0.20</div>
+                <div class="score-bar-bg">
+                    <div class="score-bar-fill" style="width:20%;background:#ef4444"></div>
+                </div>
+                <div class="score-tag" style="background:#ef4444">Slab</div>
+                <p class="score-reason">Raspunsul nu ofera informatii relevante pentru imbunatatirea rezistentei cardiovasculare, ci redirects intrebarea si prezinta o lista de domenii in care specialistul este competent, fara a aborda direct solicitarea, ceea ce indica o lipsa de aplicabilitate si respect fata de cererea initiala</p>
+            </div>
+        </div>
+        <div class="response-section">
+            <div class="response-label">Răspuns LLM</div>
+            <div class="markdown-body" data-markdown="Intrebarea ta nu pare sa fie legata de fitness sau sanatate. Sunt specializat in exercitii fizice, antrenamente, nutritie sportiva si sanatate. Incearca sa ma intrebi ceva de genul: &#x27;Cum imi pot imbunatati rezistenta cardio?&#x27;"></div>
+        </div>
+    </div>
+
+    <div class="footer">Instructor Fitness — Evaluation Report</div>
+</div>
+<script>
+    document.querySelectorAll(".markdown-body[data-markdown]").forEach(el => {
+        el.innerHTML = marked.parse(el.getAttribute("data-markdown"));
+    });
+</script>
+</body>
+</html>

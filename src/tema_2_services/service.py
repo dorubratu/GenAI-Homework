@@ -35,19 +35,22 @@ class RAGAssistant:
 
         self.client = OpenAI(
             api_key=self.groq_api_key,
-            base_url=os.environ.get("GROQ_BASE_URL"))
+            base_url=os.environ.get("OPENAI_BASE_URL"))
 
         os.makedirs(DATA_DIR, exist_ok=True)
         self.embedder = None
 
-        # ToDo: Adaugat o propozitie de referinta mai specifica pentru domeniul dvs
         self.relevance = self._embed_texts(
-            "Aceasta este o intrebare relevanta despre ...",
+            "Aceasta este o intrebare despre fitness, exercitii fizice, antrenamente, nutritie sportiva sau sanatate.",
         )[0]
 
-        # ToDo: Definiti un prompt de sistem mai detaliat pentru a ghida raspunsurile LLM-ului in directia dorita
         self.system_prompt = (
-            "..."
+            "Esti un instructor de fitness profesionist si asistent virtual specializat in exercitii fizice, "
+            "antrenamente, nutritie sportiva si sanatate. "
+            "Raspunde intotdeauna in limba romana, intr-un mod clar, prietenos si motivant. "
+            "Foloseste informatiile din contextul furnizat pentru a oferi raspunsuri precise si relevante. "
+            "Daca intrebarea nu este legata de fitness, nutritie sau sanatate, redirectioneaza politicos utilizatorul "
+            "catre subiecte relevante. Nu oferi sfaturi medicale, ci recomanda consultarea unui medic atunci cand este necesar."
         )
 
 
@@ -88,13 +91,14 @@ class RAGAssistant:
 
         system_msg = self.system_prompt
 
-        # ToDo: Ajustati acest prompt pentru a se potrivi mai bine cu domeniul dvs si pentru a ghida LLM-ul sa ofere raspunsuri mai relevante si structurate.
         messages = [
             {"role": "system", "content": system_msg},
             {
                 "role": "user",
                 "content": (
-                    "..."
+                    f"Folosind informatiile de mai jos ca referinta, raspunde la intrebarea utilizatorului.\n\n"
+                    f"Context:\n{context}\n\n"
+                    f"Intrebarea utilizatorului: {user_input}"
                 ),
             },
         ]
@@ -228,13 +232,13 @@ class RAGAssistant:
     def assistant_response(self, user_message: str) -> str:
         """Directioneaza mesajul utilizatorului catre calea potrivita."""
         if not user_message:
-            # ToDo: Ajustati acest mesaj pentru a fi mai specific pentru domeniul dvs, astfel incat sa ghideze utilizatorii sa puna intrebari relevante si sa ofere un exemplu concret.
-            return "Te rog scrie un mesaj despre ... ."
+            return "Te rog scrie un mesaj despre fitness, antrenamente sau nutritie. De exemplu: 'Ce exercitii pot face acasa pentru a slabi?'"
 
         if not self.is_relevant(user_message):
-            # ToDo: Ajustati acest mesaj pentru a fi mai specific pentru domeniul dvs, astfel incat sa ghideze utilizatorii sa puna intrebari relevante si sa ofere un exemplu concret.
             return (
-                "..."
+                "Intrebarea ta nu pare sa fie legata de fitness sau sanatate. "
+                "Sunt specializat in exercitii fizice, antrenamente, nutritie sportiva si sanatate. "
+                "Incearca sa ma intrebi ceva de genul: 'Cum imi pot imbunatati rezistenta cardio?'"
             )
 
         chunks = self._load_documents_from_web()
@@ -245,5 +249,5 @@ class RAGAssistant:
 if __name__ == "__main__":
     assistant = RAGAssistant()
     # ToDo: Testati cu intrebari relevante pentru domeniul dvs, precum si cu intrebari irelevante pentru a va asigura ca logica de filtrare functioneaza corect.
-    print(assistant.assistant_response("..."))  # test relevant
-    print(assistant.assistant_response("..."))  # test irelevant
+    print(assistant.assistant_response("Ce exercitii pot face acasa pentru a slabi?"))  # test relevant
+    print(assistant.assistant_response("Care este capitala Frantei?"))  # test irelevant

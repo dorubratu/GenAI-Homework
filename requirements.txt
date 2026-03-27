@@ -1,3 +1,5 @@
+# TensorFlow 2.16.x: use Python 3.10–3.12 (no wheels on PyPI for 3.13+).
+# Example: python3.12 -m venv venv && source venv/bin/activate
 openai>=1.66.0
 langchain-community==0.3.19
 python-dotenv==0.21.0
@@ -9,7 +11,7 @@ deepeval>=1.0.0
 groq>=0.9.0
 pytest==7.4.0
 pytest-asyncio==0.20.3
-faiss-cpu==1.8.0.post1
+faiss-cpu==1.13.2
 langchain-text-splitters==0.3.11
 setuptools<81
 tensorflow==2.16.2

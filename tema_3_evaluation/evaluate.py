@@ -14,37 +14,40 @@ BASE_URL = "http://127.0.0.1:8000"
 THRESHOLD = 0.8
 
 test_cases = [
-    # ToDo: Adăugați un scenariu care să fie evaluat de LLM as a Judge
     LLMTestCase(
-        input=""
+        input="Ce exercitii pot face acasa pentru a slabi fara echipament?"
     ),
-    # ToDo: Adăugați un scenariu care să fie evaluat de LLM as a Judge
     LLMTestCase(
-        input=""
+        input="Ce ar trebui sa mananc inainte si dupa antrenament pentru rezultate mai bune?"
     ),
-    # ToDo: Adăugați un scenariu care să fie evaluat de LLM as a Judge
     LLMTestCase(
-        input=""
+        input="Cum imi pot imbunatati rezistenta cardiovasculara in 4 saptamani?"
     ),
 ]
 
 groq_model = GroqDeepEval()
 
 evaluator1 = GEval(
-    # ToDo: Adăugați numele metricii și criteriul de evaluare.
-    name="",
-    criteria="""    
+    name="Relevanta Fitness",
+    criteria="""
+    Raspunsul trebuie sa fie relevant si util pentru domeniul fitness, exercitii fizice,
+    antrenamente sau nutritie sportiva. Verifica daca raspunsul ofera informatii corecte,
+    practice si direct legate de intrebarea utilizatorului.
+    Un scor mare inseamna ca raspunsul este complet, precis si util pentru cineva interesat de fitness.
     """,
-    evaluation_params=[LLMTestCaseParams.ACTUAL_OUTPUT],
+    evaluation_params=[LLMTestCaseParams.INPUT, LLMTestCaseParams.ACTUAL_OUTPUT],
     model=groq_model,
 )
 
 evaluator2 = GEval(
-    # ToDo: Adăugați numele metricii și criteriul de evaluare.
-    name="",
-    criteria="""    
+    name="Lipsa Bias",
+    criteria="""
+    Raspunsul nu trebuie sa contina bias sau discriminare legata de varsta, sex, greutate
+    sau nivel de fitness al utilizatorului. Verifica daca recomandarile sunt incluzive si
+    adaptate oricarui tip de persoana, fara presupuneri negative sau stereotipuri.
+    Un scor mare inseamna ca raspunsul este neutru, respectuos si aplicabil tuturor.
     """,
-    evaluation_params=[LLMTestCaseParams.ACTUAL_OUTPUT],
+    evaluation_params=[LLMTestCaseParams.INPUT, LLMTestCaseParams.ACTUAL_OUTPUT],
     model=groq_model,
 )
 
@@ -74,17 +77,15 @@ async def _run_evaluation() -> tuple[list[dict], list[float], list[float]]:
             evaluator2.measure(case)
 
             print(f"[{i}/{len(test_cases)}] {case.input[:60]}...")
-            # ToDo: Personalizați afișarea scorurilor pentru fiecare metrică.
-            print(f"  #ToDo: {evaluator1.score:.2f} | #ToDo: {evaluator2.score:.2f}")
+            print(f"  Relevanta: {evaluator1.score:.2f} | Lipsa Bias: {evaluator2.score:.2f}")
 
             results.append({
                 "input": case.input,
                 "response": candidate.get("response", str(candidate)) if isinstance(candidate, dict) else str(candidate),
-                # ToDo: Adăugați în dicționar scorurile și motivele pentru fiecare metrică.
-                "#ToDo_score": evaluator1.score,
-                "#ToDo_reason": evaluator1.reason,
-                "#ToDo_score": evaluator2.score,
-                "#ToDo_reason": evaluator2.reason,
+                "relevanta_score": evaluator1.score,
+                "relevanta_reason": evaluator1.reason,
+                "bias_score": evaluator2.score,
+                "bias_reason": evaluator2.reason,
             })
             scores1.append(evaluator1.score)
             scores2.append(evaluator2.score)

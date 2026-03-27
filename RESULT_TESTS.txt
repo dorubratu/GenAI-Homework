@@ -1,0 +1,20 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.13, pytest-7.4.0, pluggy-1.6.0 -- /Users/doru/Work/Projects/Teme_pentru_acasa/venv/bin/python3.12
+cachedir: .pytest_cache
+rootdir: /Users/doru/Work/Projects/Teme_pentru_acasa
+plugins: repeat-0.9.4, rerunfailures-12.0, asyncio-0.20.3, xdist-3.8.0, deepeval-3.4.6, langsmith-0.3.45, anyio-4.13.0
+asyncio: mode=Mode.STRICT
+collecting ... collected 3 items
+
+tema_3_tests/test_main.py::test_root_endpoint PASSED                     [ 33%]
+tema_3_tests/test_main.py::test_chat_relevant_question PASSED            [ 66%]
+tema_3_tests/test_main.py::test_chat_irrelevant_question PASSED          [100%]Running teardown with pytest sessionfinish...
+
+
+=============================== warnings summary ===============================
+tema_3_tests/test_main.py::test_chat_relevant_question
+  /Users/doru/Work/Projects/Teme_pentru_acasa/venv/lib/python3.12/site-packages/deepeval/utils.py:131: DeprecationWarning: There is no current event loop
+    loop = asyncio.get_event_loop()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+========================= 3 passed, 1 warning in 4.49s =========================
