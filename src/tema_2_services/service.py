@@ -41,16 +41,16 @@ class RAGAssistant:
         self.embedder = None
 
         self.relevance = self._embed_texts(
-            "Aceasta este o intrebare despre fitness, exercitii fizice, antrenamente, nutritie sportiva sau sanatate.",
+            "Aceasta este o intrebare despre medicina veterinara, legislatie veterinara, sanatatea animalelor, boli animale sau tratamente veterinare.",
         )[0]
 
         self.system_prompt = (
-            "Esti un instructor de fitness profesionist si asistent virtual specializat in exercitii fizice, "
-            "antrenamente, nutritie sportiva si sanatate. "
-            "Raspunde intotdeauna in limba romana, intr-un mod clar, prietenos si motivant. "
+            "Esti un medic veterinar profesionist si asistent virtual specializat in medicina veterinara, "
+            "legislatie veterinara, sanatatea animalelor, boli si tratamente pentru animale. "
+            "Raspunde intotdeauna in limba romana, intr-un mod clar, prietenos si profesionist. "
             "Foloseste informatiile din contextul furnizat pentru a oferi raspunsuri precise si relevante. "
-            "Daca intrebarea nu este legata de fitness, nutritie sau sanatate, redirectioneaza politicos utilizatorul "
-            "catre subiecte relevante. Nu oferi sfaturi medicale, ci recomanda consultarea unui medic atunci cand este necesar."
+            "Daca intrebarea nu este legata de medicina veterinara sau legislatia veterinara, redirectioneaza politicos utilizatorul "
+            "catre subiecte relevante. Recomanda intotdeauna consultarea unui medic veterinar autorizat pentru cazuri concrete."
         )
 
 
@@ -219,26 +219,24 @@ class RAGAssistant:
         return [chunks[i] for i in indices[0] if i < len(chunks)]
 
     def calculate_similarity(self, text: str) -> float:
-        # ToDo: Ajustati aceasta propozitie de referinta pentru a se potrivi mai bine cu domeniul dvs, astfel incat sa reflecte mai precis ce inseamna "relevant" in contextul aplicatiei dvs.
-        """Returneaza similaritatea cu o propozitie de referinta despre ... ."""
+        """Returneaza similaritatea cu propozitia de referinta despre medicina veterinara si legislatie veterinara."""
         embedding = self._embed_texts(text.strip())[0]
         return self._cosine_similarity(embedding, self.relevance)
 
     def is_relevant(self, user_input: str) -> bool:
-        # ToDo: Ajustati pragul de similaritate pentru a se potrivi mai bine cu domeniul dvs, astfel incat sa echilibreze corect intre a permite intrebari relevante si a respinge cele irelevante.
-        """Verifica daca intrarea utilizatorului e despre ...."""
+        """Verifica daca intrarea utilizatorului e despre medicina veterinara sau legislatie veterinara."""
         return self.calculate_similarity(user_input) >= 0.5
 
     def assistant_response(self, user_message: str) -> str:
         """Directioneaza mesajul utilizatorului catre calea potrivita."""
         if not user_message:
-            return "Te rog scrie un mesaj despre fitness, antrenamente sau nutritie. De exemplu: 'Ce exercitii pot face acasa pentru a slabi?'"
+            return "Te rog scrie un mesaj despre medicina veterinara sau legislatie veterinara. De exemplu: 'Care sunt bolile comune la caini si cum se trateaza?'"
 
         if not self.is_relevant(user_message):
             return (
-                "Intrebarea ta nu pare sa fie legata de fitness sau sanatate. "
-                "Sunt specializat in exercitii fizice, antrenamente, nutritie sportiva si sanatate. "
-                "Incearca sa ma intrebi ceva de genul: 'Cum imi pot imbunatati rezistenta cardio?'"
+                "Intrebarea ta nu pare sa fie legata de medicina veterinara sau legislatie veterinara. "
+                "Sunt specializat in sanatatea animalelor, boli si tratamente veterinare si legislatie veterinara. "
+                "Incearca sa ma intrebi ceva de genul: 'Ce vacccinuri sunt obligatorii pentru caini?'"
             )
 
         chunks = self._load_documents_from_web()
@@ -248,6 +246,9 @@ class RAGAssistant:
 
 if __name__ == "__main__":
     assistant = RAGAssistant()
-    # ToDo: Testati cu intrebari relevante pentru domeniul dvs, precum si cu intrebari irelevante pentru a va asigura ca logica de filtrare functioneaza corect.
-    print(assistant.assistant_response("Ce exercitii pot face acasa pentru a slabi?"))  # test relevant
-    print(assistant.assistant_response("Care este capitala Frantei?"))  # test irelevant
+    print(assistant.assistant_response("Care sunt bolile comune la caini si cum se trateaza?"))  # test relevant - medicina veterinara
+    print(assistant.assistant_response("Ce ingrijire necesita un iepure de casa?"))  # test relevant - animale de companie
+    print(assistant.assistant_response("Ce vaccinuri sunt obligatorii pentru pisici conform legislatiei din Romania?"))  # test relevant - legislatie veterinara
+    print(assistant.assistant_response("Cine a scris Hamlet?"))  # test irelevant
+    print(assistant.assistant_response("Care este reteta pentru ciorba de burta?"))  # test irelevant
+    
